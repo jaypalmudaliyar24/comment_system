@@ -33,7 +33,7 @@ function Question() {
                             <ReactQuill className='react-quill' theme='snow' />
                         </div>
                     </div>
-                    <div className='question-option'>
+                    {/* <div className='question-option'>
                         <div className='title'>
                             <h3>Tags</h3>
                             <small>
@@ -42,7 +42,7 @@ function Question() {
                             </small>
                             <TagsInput name="tags" placeHolder='press enter to add new tag' />
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <button className='button'>Add your question</button>
