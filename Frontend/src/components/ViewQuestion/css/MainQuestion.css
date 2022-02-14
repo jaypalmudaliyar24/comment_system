@@ -1,0 +1,26 @@
+.main-desc {
+    display: flex;
+    width: 100%;
+}
+
+.info {
+    display: flex;
+    align-items: center;
+    font-size: small;
+}
+  
+.info > p {
+    color: rgba(0, 0, 0, 0.4);
+    margin: 0 10px;
+}
+
+.main > button {
+    margin-top: 20px;
+    font-size: small;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.4);
+}
+  
+.main > button:hover {
+    color: #0151f0a2;
+}
