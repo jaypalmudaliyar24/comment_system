@@ -11,6 +11,8 @@ require __DIR__ . '/../vendor/autoload.php';
 
 // AppFactory::setContainer($container);
 
+// test commit
+
 $app = AppFactory::create();
 
 $app->addRoutingMiddleware();
