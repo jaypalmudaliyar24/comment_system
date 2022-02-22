@@ -78,6 +78,23 @@
     border: 1px solid #0054ff;
     box-shadow: 0 4px 8px 0 #0055ff23, 0 6px 20px 0 #0055ff11;
   }
+
+  .title > textarea {
+    margin: 5px 0px;
+    padding: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    min-height: 70%;
+    outline: none;
+  }
+  
+  .title > textarea::placeholder {
+    color: #ddd;
+  }
+  .title > textarea:focus {
+    border: 1px solid #0054ff;
+    box-shadow: 0 4px 8px 0 #0055ff23, 0 6px 20px 0 #0055ff11;
+  }
   
   .quill {
     height: 100%;

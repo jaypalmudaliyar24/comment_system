@@ -95,3 +95,46 @@ $app->get('/view/{id}/all', function (Request $req, Response $resp, array $args)
             ->withStatus(500);
     }
 })->setName('root');
+
+$app->post('/addquestion', function(Request $req, Response $resp, array $args) {
+    $table = "questionanswerdb";
+    $recievedData = $req->getParsedBody();
+    $title = $recievedData['title'];
+    $body = $recievedData['body'];
+    $author = $recievedData['author'];
+    $votes = 0;
+    $comments = 0;
+    $level = 0;
+    $deleted = 0;
+    $pid = 0;
+    $sql = "INSERT INTO " . $table . " (title, body, votes, comments, author, level, deleted, pid) VALUE 
+            (:title, :body, :votes, :comments, :author, :level, :deleted, :pid)";
+    try {
+        $db = new Dbconnect();
+        $conn = $db->connect();
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':title', $title);
+        $stmt->bindParam(':body', $body);
+        $stmt->bindParam(':votes', $votes);
+        $stmt->bindParam(':comments', $comments);
+        $stmt->bindParam(':author', $author);
+        $stmt->bindParam(':level', $level);
+        $stmt->bindParam(':deleted', $deleted);
+        $stmt->bindParam(':pid', $pid);
+        $result = $stmt->execute();
+
+        $db = null;
+        $resp->getBody()->write(json_encode($result));
+        return $resp
+            ->withStatus(200);
+    } catch(PDOException $e) {
+        $error = array (
+            "message" => $e->getMessage()
+        );
+
+        $resp->getBody()->write(json_encode($error));
+        return $resp
+            ->withStatus(500);
+    }
+})->setName('root');
