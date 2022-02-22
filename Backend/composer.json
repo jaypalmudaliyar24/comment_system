@@ -2,6 +2,6 @@
     "require": {
         "slim/slim": "4.*",
         "slim/psr7": "^1.5",
-        "php-di/php-di": "2.1"
+        "vlucas/phpdotenv": "^5.4"
     }
 }

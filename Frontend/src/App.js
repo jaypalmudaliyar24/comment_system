@@ -18,9 +18,10 @@ function App() {
       <Router>
         <Header />
         <Switch>
-          <Route exact path='/add-question' component = {Question} />
-          <Route exact path='/question' component = {ViewQuestion} />
           <Route exact path='/' component = {StackOverflow} />
+          <Route exact path='/question/:id' component = {ViewQuestion} />
+          <Route exact path='/add-question' component = {Question} />
+          {/* <Route exact path='/question' component = {ViewQuestion} /> */}
         </Switch>
       </Router>
       {/* <Header /> */}

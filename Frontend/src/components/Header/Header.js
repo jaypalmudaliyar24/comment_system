@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 import './css/Header.css';
 import SearchIcon from '@mui/icons-material/Search';
@@ -9,7 +10,6 @@ import { Link } from 'react-router-dom';
 
 function Header() {
   return (<header>
-    
     <div className="header-container">
       <div className="header-left">
         {/* <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/

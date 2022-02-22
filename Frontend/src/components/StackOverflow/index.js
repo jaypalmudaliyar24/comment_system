@@ -7,7 +7,7 @@ function index() {
   return (
   <div className='stack-index' >
       <div className='stack-index-content'>
-          <Sidebar />
+          {/* <Sidebar /> */}
           <Main />
       </div>
   </div>
