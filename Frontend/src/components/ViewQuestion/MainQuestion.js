@@ -9,7 +9,7 @@ import TopComment from './TopComment';
 function MainQuestion() {
     const { id } = useParams();
     const url1 = `${process.env.REACT_APP_API_URL}/view/${id}`
-    const url2 = `${process.env.REACT_APP_API_URL}/view/${id}/all`
+    const url2 = `${process.env.REACT_APP_API_URL}/view/${id}/answers`
     const [questiondata, setQuestionData] = useState();
     const [topcomments, setTopComments] = useState();
     const fetchQuestionData = async () => {
@@ -67,7 +67,10 @@ function MainQuestion() {
                         <p>{questiondata[0].comments} Comments</p>
                         {
                             topcomments.map(item => (
-                                <TopComment data={item} />
+                                <TopComment data={{
+                                    props : item,
+                                    repliedTo : questiondata[0].author
+                                }} />
                             ))
                         }
                     </div>

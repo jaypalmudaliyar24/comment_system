@@ -1,13 +1,70 @@
 import { Bookmark, History } from '@mui/icons-material';
 import { Avatar } from '@mui/material';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { Link } from 'react-router-dom';
-import './css/TopComment.css';
+import { Link, useHistory } from 'react-router-dom';
+import './css/Reply.css';
 
-function TopComment({par_id,level}) {
+function Reply(data) {
+    // console.log(data);
+    data = data.data;
+    const props = data.props
+    const repliedTo = data.repliedTo
+    console.log(props);
+    const tid = data.tid 
+    const history = useHistory();
+    const url1 = `${process.env.REACT_APP_API_URL}/adddata`;
+    const url2 = `${process.env.REACT_APP_API_URL}/view/${props.id}/answers`
+
     const [show, setShow] = useState(false);
+    const [replies, setReplies] = useState()
+    const fetchRepliesData = async () => {
+        fetch(url2, {
+            method: 'GET',
+        })
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                // console.log(data);
+                setReplies(data);
+            })
+    };
+    // const fetchCommentCount = async () => {
+    //     fetch(url3, {
+    //         method: 'GET',
+    //     })
+    //         .then(function (response) {
+    //             return response.json();
+    //         })
+    //         .then(function (data) {
+    //             // console.log(data);
+    //             setCount(data);
+    //         })
+    // };
+    useEffect(()=>{
+        fetchRepliesData();
+    },[])
+
+    const [sendData, setSendData] = useState({
+        title : "",
+        body : "",
+        comments : 0, // take fetched data only
+        author : "REPLYauth123",
+        level : props.level,
+        pid : props.id
+    });
+
+    function handleUpdate(e) {
+
+    }
+
+    function submitHandler(e) {
+
+    }
+
+    // in the post of add reply put a if on level < 5 then only make a call
     
     // give left margin based on level
 
@@ -28,7 +85,7 @@ function TopComment({par_id,level}) {
                 <p className='arrow' style={{
                     cursor: "pointer",
                 }}>▲</p>
-                <p className='arrow'>0</p> {/* Vote Count */}
+                <p className='arrow'>{props.votes}</p> {/* Vote Count */}
                 <p className='arrow' style={{
                     cursor: "pointer",
                 }}>▼</p>
@@ -37,14 +94,15 @@ function TopComment({par_id,level}) {
             </div>
         </div>
         <div className='right'>
-            <p>This is Question Body</p>
+            <p>{props.body}</p>
             <div className='author'>
-                <small>Posted "TimeStamp"</small>
-                <small>Last Edited "TimeStamp"</small>
+                <small>Posted {props.created}</small>
+                <small>Last Edited {props.lastEdit}</small>
+                <small>Replied to : {repliedTo}</small>
                 <Link>
                     <div className='auth-details'>
                         <Avatar />
-                        <p>Author Name</p>
+                        <p>{props.author}</p>
                     </div>
                 </Link>
             </div>
@@ -56,17 +114,34 @@ function TopComment({par_id,level}) {
                         <small>TimeStamp</small>
                     </p>
                 </div> */}
-                <p onClick={() => setShow(!show)}>Add a reply</p>
+                <p onClick={() => setShow(!show)}>Add a reply</p><br />
                 {
                     show && (<div>
-                        <ReactQuill className='react-quill' theme='snow' style={{
+                        <textarea onChange={(e)=>handleUpdate(e)} style={{
+                            height: "100%",
+                            width: "60%",
+                        }}
+                        id="body" value={sendData.body} type="text" placeholder="Post your Reply... " />
+                        <br />
+                        {/* <ReactQuill className='react-quill' theme='snow' style={{
                             hieght: "10%",
                             width: "60%",
-                        }} />
+                        }} /> */}
                         {/*  <Link to={`/messages/chat/${item.id}`}></Link> */}
-                        {/* Call Reply.js with current reply id */}
-                        <button>Add reply</button>
+                        {/* Call Reply.js with current top comment id */}
+                        <button onClick={(e)=>submitHandler(e)}>Add reply</button>
                     </div>)
+                }
+            </div>
+            <div className='replies'>
+                { replies  &&
+                    replies.map(item => {
+                        <Reply data = {{
+                            props : item,
+                            repliedTo : props.author,
+                            tid : tid
+                        }} />
+                    })
                 }
             </div>
         </div>
@@ -74,4 +149,4 @@ function TopComment({par_id,level}) {
   )
 }
 
-export default TopComment
+export default Reply

@@ -7,12 +7,15 @@ import { useHistory } from 'react-router-dom';
 import './css/Question.css';
 
 function Question() {
-    const url = `${process.env.REACT_APP_API_URL}/addquestion`;
+    const url = `${process.env.REACT_APP_API_URL}/adddata`;
     const history = useHistory();
     const [sendData, setSendData] = useState({
         title: "",
         body: "",
-        author: "Unknown123"
+        comments : 0,
+        author: "Unknown123",
+        level : 0,
+        pid : 0
     })
     function handle(e) {
         const newData = { ...sendData }
@@ -21,14 +24,17 @@ function Question() {
     }
     function submitHandler(e) {
         e.preventDefault();
-        if(sendData.title) {
+        if(sendData.title && sendData.body) {
             axios.post(url, {
                 title : sendData.title,
                 body : sendData.body,
-                author : sendData.author
+                comments : parseInt(sendData.comments),
+                author : sendData.author,
+                level : parseInt(sendData.level),
+                pid : parseInt(sendData.pid)
             })
                 .then(res => {
-                    console.log(res.data);
+                    // console.log(res.data);
                     alert("Question added Successfully")
                     history.push("/");
                 })
