@@ -1,4 +1,6 @@
 <?php
+
+use Dotenv\Repository\Adapter\WriterInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
@@ -68,7 +70,7 @@ $app->get('/view/{id}', function (Request $req, Response $resp, array $args) {
     }
 })->setName('root');
 
-$app->get('/view/{id}/all', function (Request $req, Response $resp, array $args) {
+$app->get('/view/{id}/answers', function (Request $req, Response $resp, array $args) {
     $table = "questionanswerdb";
     $id = $args['id'];
     $sql = "SELECT * FROM " . $table . " WHERE pid = $id ORDER BY created ASC";
@@ -96,17 +98,44 @@ $app->get('/view/{id}/all', function (Request $req, Response $resp, array $args)
     }
 })->setName('root');
 
-$app->post('/addquestion', function(Request $req, Response $resp, array $args) {
+$app->get('/view/{id}/comments', function(Request $req, Response $resp, array $args) {
+    $table = "questionanswerdb";
+    $id = $args['id'];
+    $sql = "SELECT comments FROM " . $table . " WHERE id = $id";
+    try {
+        $db = new Dbconnect();
+        $conn = $db->connect();
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+        $db = null;
+        $resp->getBody()->write(json_encode($data));
+        return $resp 
+            ->withStatus(200);
+    } catch(PDOException $e) {
+        $error = array (
+            "message" => $e->getMessage()
+        );
+
+        $resp->getBody()->write(json_encode($error));
+        return $resp 
+            ->withStatus(500);
+    }
+})->setName('root');
+
+$app->post('/adddata', function(Request $req, Response $resp, array $args) {
     $table = "questionanswerdb";
     $recievedData = $req->getParsedBody();
     $title = $recievedData['title'];
     $body = $recievedData['body'];
     $author = $recievedData['author'];
     $votes = 0;
-    $comments = 0;
-    $level = 0;
+    $comments = $recievedData['comments'];
+    $level = $recievedData['level'];
     $deleted = 0;
-    $pid = 0;
+    $pid = $recievedData['pid'];
     $sql = "INSERT INTO " . $table . " (title, body, votes, comments, author, level, deleted, pid) VALUE 
             (:title, :body, :votes, :comments, :author, :level, :deleted, :pid)";
     try {
