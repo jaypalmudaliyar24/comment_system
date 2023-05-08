@@ -1,4 +1,4 @@
-"# comment_system" 
+# Stack Overflow Clone
 ![home page](https://github.com/jaypalmudaliyar24/comment_system/blob/main/Screenshots/home.jpg)
 
 <br>
